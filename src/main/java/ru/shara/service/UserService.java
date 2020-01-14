@@ -20,17 +20,59 @@ import java.util.List;
 @EnableTransactionManagement(proxyTargetClass = true)
 public class UserService implements UserDetailsService {
 
-    private final String SERVER_URL = "http://localhost:8090/rest/";
+
+    private final String REST_SERVER_URL = "http://localhost:8090/rest/";
 
     @Autowired
     private RestTemplate restTemplate;
 
-    public UserService() {
+    UserService() {	}
+
+    public void save(User user) {
+        restTemplate.put(REST_SERVER_URL + "new-user", user);
     }
 
-    @Bean
-    public RestTemplate getRestTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder.basicAuthentication("root", "root").build();
+    public void saveIfNotExists(User user) {
+        User checked = restTemplate.getForObject(REST_SERVER_URL + "user/name/" + user.getName(), User.class);
+
+        if (checked == null) {
+            restTemplate.put(REST_SERVER_URL + "new-user", user);
+        }
+    }
+
+    public List<User> listAll() {
+        List<User> result = restTemplate.getForObject(REST_SERVER_URL + "all-users", List.class);
+
+        return result;
+    }
+
+    public User get(Long id) {
+        User result = restTemplate.getForObject(REST_SERVER_URL + "user/id/" + id, User.class);
+
+        return result;
+    }
+
+    public User getUserByName(String name) {
+        User result = restTemplate.getForObject(REST_SERVER_URL + "user/name/" + name, User.class);
+
+        System.out.println(result);
+        return result;
+    }
+
+    public void delete(Long id) {
+        restTemplate.delete(REST_SERVER_URL + "user/id/" + id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+
+        User user = getUserByName(name);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("No user found with username: " + name);
+        }
+
+        return user;
     }
 
     @Bean
@@ -38,37 +80,8 @@ public class UserService implements UserDetailsService {
         return new BCryptPasswordEncoder();
     }
 
-    public List<User> getAllUsers() {
-        return restTemplate.getForObject(SERVER_URL + "users", List.class);
-
-    }
-
-    public User getUser(Long id) {
-        return restTemplate.getForObject(SERVER_URL + "users/id/" + id, User.class);
-    }
-
-    public void createUser(User user) {
-        restTemplate.put(SERVER_URL + "users", user);
-    }
-
-    public void updateUser(User user) {
-        restTemplate.put(SERVER_URL + "users/id/" +  user.getId(), User.class);
-    }
-
-    public void deleteUser(Long id) {
-        restTemplate.delete(SERVER_URL + "users/id/" + id);
-    }
-
-    public User getUserByUsername(String name) {
-        return restTemplate.getForObject(SERVER_URL + "users/name/" + name, User.class);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = getUserByUsername(username);
-        if( user == null) {
-            throw  new UsernameNotFoundException("User with name " + username + "not found");
-        }
-        return user;
+    @Bean
+    public RestTemplate getRestTemplate(RestTemplateBuilder restTemplateBuilder) {
+        return restTemplateBuilder.basicAuthentication("root", "root").build();
     }
 }

@@ -8,47 +8,54 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import ru.shara.model.UserRoleEnum;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     protected Log logger = LogFactory.getLog(this.getClass());
+
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication auth) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request,
+                                        HttpServletResponse response, Authentication authentication)
+            throws IOException {
 
-        handle(request, response, auth);
+        handle(request, response, authentication);
         clearAuthenticationAttributes(request);
     }
 
-    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication auth)
+    protected void handle(HttpServletRequest request,
+                          HttpServletResponse response, Authentication authentication)
             throws IOException {
-        String targetUrl = determineTargetUrl(auth);
+
+        String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {
-            logger.debug("Response has been committed. Unable to redirect " + targetUrl);
+            logger.debug(
+                    "Response has already been committed. Unable to redirect to "
+                            + targetUrl);
             return;
         }
+
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(Authentication auth) {
+    protected String determineTargetUrl(Authentication authentication) {
         boolean isUser = false;
         boolean isAdmin = false;
-        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+        Collection<? extends GrantedAuthority> authorities
+                = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("USER")) {
+            if (grantedAuthority.getAuthority().equals(UserRoleEnum.USER.name())) {
                 isUser = true;
             }
-            if (grantedAuthority.getAuthority().equals("ADMIN")) {
+            if (grantedAuthority.getAuthority().equals(UserRoleEnum.ADMIN.name())) {
                 isAdmin = true;
             }
         }
@@ -70,11 +77,10 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
-    public RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
-    }
-
     public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
         this.redirectStrategy = redirectStrategy;
+    }
+    protected RedirectStrategy getRedirectStrategy() {
+        return redirectStrategy;
     }
 }

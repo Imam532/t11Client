@@ -1,0 +1,242 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Person List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script
+            src="http://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <style>
+        .form-signin {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            margin: auto;
+        }
+
+        .form-signin .add-button{
+            max-width: 200px;
+            margin: auto;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script type="text/javascript" src="/js/listUsers.js"></script>
+    <script type="text/javascript" src="/js/getModal.js"></script>
+    <script type="text/javascript" src="/js/deleteUser.js"></script>
+    <script type="text/javascript" src="/js/adduser.js"></script>
+    <script type="text/javascript" src="/js/updateUser.js"></script>
+
+    <link href="/css/board.css" rel="stylesheet" type="text/css" >
+</head>
+<body>
+
+
+<div th:replace="elements/header :: client_header">
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2  d-md-block bg-light sidebar"> <!--d-none-->
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column nav-sidebar">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/admin">
+                            <span data-feather="home"></span>
+                            Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user">
+                            <span data-feather="file"></span>
+                            User
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <h1 class="h1" style="margin-top: 25px">Admin panel</h1>
+        <ul class="nav nav-tabs">
+            <li class="nav-item" >
+                <a class="nav-link active" data-toggle="tab" id="home-tab" aria-selected="true" aria-controls="home" href="#usersTable">Active</a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" id="new-user-tab" aria-selected="false" aria-controls="new-user" href="#newuser" >New User</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+
+            <!--A Table-->
+            <div id="usersTable" class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
+                <div class="card">
+                    <div class="card-header">All users</div>
+                </div>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Password</th>
+                        <th>E-mail</th>
+                        <th>Address</th>
+                        <th>Roles</th>
+                        <th>Edit </th>
+                        <th>Delete </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+
+                    </tr>
+                </table>
+            </div>
+            <!--End of Table-->
+
+            <!--A New User-->
+            <div id="newuser" class="tab-pane fade" role="tabpanel" aria-labelledby="new-user-tab">
+                <div class="card">
+                    <div class="card-header">Add New User</div>
+                </div>
+
+                <form class="form-signin">
+                    <!-- Name -->
+                    <div class="form-group text-center">
+                        <label for="addUserName">Name</label>
+                        <input type="text" id="addUserName" class="form-control" placeholder="Enter Name" required/>
+                    </div>
+                    <!-- Password -->
+                    <div class="form-group text-center">
+                        <label for="addPassword">Password</label>
+                        <input type="text" id="addPassword" class="form-control" placeholder="Enter Password" required/>
+                    </div>
+                    <!-- Email -->
+                    <div class="form-group text-center">
+                        <label for="addEmail">Email</label>
+                        <input type="text" id="addEmail" class="form-control" placeholder="Enter Email" required/>
+                    </div>
+                    <!-- Address -->
+                    <div class="form-group text-center">
+                        <label for="addAddress">Address</label>
+                        <input type="text" id="addAddress" class="form-control" placeholder="Enter Address" required/>
+                    </div>
+                    <!--Roles -->
+                    <div class="form-group row mb-auto">
+                        <div class="col">Roles</div>
+                        <div class="form-check col text-right">
+                            <input class="form-check-input" type="checkbox" id="userRoleCheck" required checked>
+                            <label class="form-check-label" for="userRoleCheck">
+                                User
+                            </label>
+                        </div>
+                        <div class="form-check col text-right">
+                            <input class="form-check-input" type="checkbox" id="adminRoleCheck">
+                            <label class="form-check-label" for="adminRoleCheck">
+                                Admin
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="add-button mt-3">
+                        <input id="addUserButton" type="submit" class="btn btn-lg btn-primary btn-block btn-success" value="Add New User"/>
+                    </div>
+                </form>
+            </div>
+            <!--A New User End-->
+        </div>
+
+        <!--Modal-->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">User edit</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form class="modal-body">
+                        <div class="modal-body container-fluid" style="max-width: 500px;">
+                            <form class="form-signin">
+                                <!-- modal Id -->
+                                <div class="form-group text-center">
+                                    <label for="modalUserId" >Id</label>
+                                    <input hidden="" />
+                                    <input type="number" id="modalUserId" class="form-control" disabled/>
+                                </div>
+                                <!-- modal Name -->
+                                <div class="form-group text-center">
+                                    <label for="modalUserName">Name</label>
+                                    <input type="text" id="modalUserName" class="form-control" required/>
+                                </div>
+                                <!-- modal Password -->
+                                <div class="form-group text-center">
+                                    <label for="modalUserPassword">Password</label>
+                                    <input type="text" id="modalUserPassword" class="form-control" />
+                                </div>
+                                <!-- modal Email -->
+                                <div class="form-group text-center">
+                                    <label for="modalUserEmail">Email</label>
+                                    <input type="text" id="modalUserEmail" class="form-control" required/>
+                                </div>
+                                <!-- modal Address -->
+                                <div class="form-group text-center">
+                                    <label for="modalUserAddress">Address</label>
+                                    <input type="text" id="modalUserAddress" class="form-control" required/>
+                                </div>
+
+                                <div class="form-group row mb-auto mb-3">
+                                    <div class="col-md-6">Roles</div>
+                                    <div class="form-check col text-right">
+                                        <input class="form-check-input" type="checkbox" id="modalUserRoleCheck"
+                                               required checked>
+                                        <label class="form-check-label" for="userRoleCheck">
+                                            User
+                                        </label>
+                                    </div>
+                                    <div class="form-check col text-right">
+                                        <input class="form-check-input" type="checkbox" id="modalAdminRoleCheck">
+                                        <label class="form-check-label" for="adminRoleCheck">
+                                            Admin
+                                        </label>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="closeButton" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button id="saveChanges" type="button" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--Modal end-->
+
+    </main>
+
+</div>
+
+
+
+
+</body>
+</html>

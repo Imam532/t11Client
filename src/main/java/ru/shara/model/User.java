@@ -1,8 +1,5 @@
 package ru.shara.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,40 +9,79 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-@Data
-@NoArgsConstructor
-@Builder
-@Entity
-@Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
+
     @Column(name = "name")
-    private String username;
+    private String name;
+
     @Column(name = "password")
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id")},
-                inverseJoinColumns = {@JoinColumn(name = "role_id")})
-//    @ToString.Exclude
-   private Set<Role> roles = new HashSet<>();
 
-    public User (Long id, String username, String password, Set<Role> roles) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "address")
+    private String address;
+
+    @ElementCollection(targetClass = UserRoleEnum.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<UserRoleEnum> authorities = new HashSet<>();
+
+    public User() {
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+    public User(String name, String password, String email, String address) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.address = address;
+    }
+
+    public User(String name, String password, String email, String address, Set<UserRoleEnum> authorities) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.address = address;
+        this.authorities = authorities;
+    }
+
+    public User(Long id, String name, String password, String email, String address, Set<UserRoleEnum> authorities) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.address = address;
+        this.authorities = authorities;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return name;
     }
 
     @Override
@@ -66,5 +102,59 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    public Set<UserRoleEnum> getRoles() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<UserRoleEnum> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void addRole(String role) {
+        if (role.equals("USER")) {
+            authorities.add(UserRoleEnum.USER);
+        }
+    }
+
+    public boolean isAdmin() {
+        return authorities.contains(UserRoleEnum.ADMIN);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", authorities=" + authorities +
+                '}';
     }
 }
