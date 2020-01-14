@@ -51,8 +51,8 @@ public class UserService implements UserDetailsService {
         restTemplate.put(SERVER_URL + "users", user);
     }
 
-    public void updateUser(Long id, User user) {
-        restTemplate.put(SERVER_URL + "users/id/" + id, user);
+    public void updateUser(User user) {
+        restTemplate.put(SERVER_URL + "users/id/" +  user.getId(), User.class);
     }
 
     public void deleteUser(Long id) {
