@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UserPage</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+
+<body class="vh-100 d-flex flex-column">
+
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand text-white-50 font-weight-normal mb-0 h1">Spring Boot</span>
+    <a href="/logout" class="text-white-50">Logout</a>
+</nav>
+
+<div class="container-fluid h-100 d-flex">
+    <div class="row no-gutters h-100 w-100">
+        <div class="col-2 mt-4">
+            <nav class="nav flex-column">
+                <a class="nav-link" href="/admin/users">Admin</a>
+                <a class="nav-link active bg-primary text-white" href="/user">User</a>
+            </nav>
+        </div>
+        <div class="col-10 px-5 py-3 bg-light">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                <h3 class="h2">User Page</h3>
+            </div>
+
+            <div>
+                <h6 class="h6">Hello <th:block th:text="${username}"></th:block>!</h6>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

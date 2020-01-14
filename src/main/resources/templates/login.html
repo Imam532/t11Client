@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <meta charset="UTF-8">
+
+    <title>Login</title>
+
+</head>
+<body class="text-center bg-light">
+<form action="/j_spring_security_check" method="POST" class="form-signin">
+    <p th:if="${param.error}" class="error">
+        Invalid Username or Password!
+    </p>
+    <div class="container-fluid col-2 my-5">
+        <div class="row">
+            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+            <input type="text" class="form-control" name='j_username' placeholder="Name" required autofocus>
+
+            <input type="password" id="inputPassword" class="form-control" name='j_password' placeholder="Password" required>
+
+            <button class="btn btn-lg btn-primary btn-block my-2" type="submit">Sign in</button>
+
+        </div>
+    </div>
+</form>
+</body>
+</html>
