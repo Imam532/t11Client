@@ -18,9 +18,7 @@ function getUsers() {
                 tableBody.append(`<tr>
                     <td>${user.id}</td> 
                     <td>${user.name}</td> 
-                    <td>${user.password}</td>
-                    <td>${user.email}</td>
-                    <td>${user.address}</td>
+                    <td>${user.password}</td>             
                     <td><i>${stringRoles}</i></td>
                     <td><button id="userButton" class="btn btn-info" role="button" data-toggle="modal" 
                     data-target="#editModal" onclick = "getModal(${user.id})"> 

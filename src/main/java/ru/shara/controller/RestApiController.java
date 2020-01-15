@@ -63,9 +63,7 @@ public class RestApiController {
             return ResponseEntity.notFound().build();
         }
         user.setName(userData.getName());
-        user.setAuthorities(userData.getRoles());
-        user.setEmail(userData.getEmail());
-        user.setAddress(userData.getAddress());
+        user.setUserRoles(userData.getUserRoles());
 
         if (userData.getPassword() != null && !userData.getPassword().equals("") && !userData.getPassword().equals(" ")) {
             user.setPassword(encoder.encode(userData.getPassword()));

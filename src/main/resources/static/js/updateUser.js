@@ -16,8 +16,6 @@ $(document).ready(function () {
             id :  $("#modalUserId").val(),
             name: $("#modalUserName").val(),
             password: $("#modalUserPassword").val(),
-            email: $("#modalUserEmail").val(),
-            address: $("#modalUserAddress").val(),
             authorities: roles
         };
 

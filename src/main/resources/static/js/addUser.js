@@ -14,8 +14,6 @@ $(document).ready(function () {
         var user = {
             name: $("#addUserName").val(),
             password: $("#addPassword").val(),
-            email: $("#addEmail").val(),
-            address: $("#addAddress").val(),
             authorities: roles
         };
 
